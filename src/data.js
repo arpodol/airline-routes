@@ -1396,7 +1396,7 @@ const airports = [
 ];
 
 function getAirlineById(id) {
-  return airlines.find(airline => airline.id === id).name;
+  return airlines.find(airline => airline.id === id);
 }
 
 function getAirportByCode(code) {
