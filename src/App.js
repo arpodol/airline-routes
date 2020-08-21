@@ -8,9 +8,9 @@ class App extends Component {
   render() {
     const routeRows = DATA.routes.map((route, idx) => (
       <tr key={idx}>
-        <td>{route.airline}</td>
-        <td>{route.src}</td>
-        <td>{route.dest}</td>
+        <td>{DATA.getAirlineById(route.airline).name}</td>
+        <td>{DATA.getAirportByCode(route.src).name}</td>
+        <td>{DATA.getAirportByCode(route.dest).name}</td>
       </tr>
     ))
     return (
@@ -19,18 +19,20 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <table className='routes-table'>
-            <thead>
-            <tr>
-              <th>airline</th>
-              <th>src</th>
-              <th>dest</th>
-            </tr>
-            </thead>
-            <tbody>
-            { routeRows }
-            </tbody>
-          </table>
+          <div>
+            <table className='routes-table'>
+              <thead>
+                <tr>
+                  <th>Airline</th>
+                  <th>Source Airport</th>
+                  <th>Destination Airport</th>
+                </tr>
+              </thead>
+              <tbody>
+                { routeRows }
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     );
