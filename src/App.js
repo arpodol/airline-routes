@@ -4,7 +4,7 @@ import DATA from './data.js'
 import './App.css';
 import Table from './components/table.js'
 import Select from './components/select.js'
-
+import Map from './components/map.js'
 
 class App extends Component {
   state = {
@@ -47,6 +47,20 @@ class App extends Component {
     return route.src === this.state.selectedAirport || route.dest === this.state.selectedAirport || this.state.selectedAirport === 'all';
   }
 
+  retrieveRouteLatLong(route){
+    const sourceAirport = DATA.getAirportByCode(route.src);
+    const destinationAirport = DATA.getAirportByCode(route.dest);
+    return {
+      airline: route.airline,
+      source: route.src,
+      sourceLong: sourceAirport.long,
+      sourceLat: sourceAirport.lat,
+      destination: route.dest,
+      destinationLong: destinationAirport.long,
+      destinationLat: destinationAirport.lat,
+    }
+  }
+
 
   render() {
     const columns = [
@@ -61,12 +75,17 @@ class App extends Component {
 
     const filteredAirports = DATA.airports.filter(airport => filteredRoutes.some(route => route.src === airport.code || route.dest === airport.code));
 
+    const filteredRoutesCoordinates = filteredRoutes.map(route => this.retrieveRouteLatLong(route));
+
     return (
       <div className="app">
         <header className="header">
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
+          <Map
+            routes={filteredRoutesCoordinates}
+            ></Map>
           <p>
             Show Routes on
           <Select allOptions={DATA.airlines} filteredOptions={filteredAirlines} valueKey="id" titleKey="name"
