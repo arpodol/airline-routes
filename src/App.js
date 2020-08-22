@@ -32,6 +32,13 @@ class App extends Component {
     })
   )
 
+  onClearClick = () => {
+    this.setState({
+      selectedAirline: 'all',
+      selectedAirport: 'all',
+    })
+  }
+
   routeMatchesSelectedAirline(route){
     return route.airline.toString() === this.state.selectedAirline || this.state.selectedAirline === 'all';
   }
@@ -47,7 +54,8 @@ class App extends Component {
       {name: 'Source Airport', property: 'src'},
       {name: 'Destination Airport', property: 'dest'},
     ];
-    console.log(this.state.selectedAirport)
+
+
     const filteredAirlines = DATA.airlines;
 
     const filteredAirports = DATA.airports;
@@ -67,6 +75,7 @@ class App extends Component {
             flying in or out of
           <Select options={filteredAirports} valueKey="code" titleKey="name"
               allTitle="All Airports" value="" onSelect={this.onAirportSelect} />
+            <button onClick={this.onClearClick}>Show All Routes</button>
           </p>
             <Table className="routes-table" columns={columns} rows={filteredRoutes} format={this.formatValue} perPage={25} />
         </section>
