@@ -55,12 +55,11 @@ class App extends Component {
       {name: 'Destination Airport', property: 'dest'},
     ];
 
-
-    const filteredAirlines = DATA.airlines;
-
-    const filteredAirports = DATA.airports;
-
     const filteredRoutes = DATA.routes.filter(route => this.routeMatchesSelectedAirline(route) && this.routeMatchesSelectedAirport(route));
+
+    const filteredAirlines = DATA.airlines.filter(airline => filteredRoutes.some(route => route.airline === airline.id));
+
+    const filteredAirports = DATA.airports.filter(airport => filteredRoutes.some(route => route.src === airport.code || route.dest === airport.code));
 
     return (
       <div className="app">
@@ -70,12 +69,12 @@ class App extends Component {
         <section>
           <p>
             Show Routes on
-          <Select options={filteredAirlines} valueKey="id" titleKey="name"
+          <Select allOptions={DATA.airlines} filteredOptions={filteredAirlines} valueKey="id" titleKey="name"
               allTitle="All Airlines" value="" onSelect={this.onAirlineSelect} />
             flying in or out of
-          <Select options={filteredAirports} valueKey="code" titleKey="name"
+          <Select allOptions={DATA.airports} filteredOptions={filteredAirports} valueKey="code" titleKey="name"
               allTitle="All Airports" value="" onSelect={this.onAirportSelect} />
-            <button onClick={this.onClearClick}>Show All Routes</button>
+            <button disabled={this.state.selectedAirline === 'all' && this.state.selectedAirport === 'all'}onClick={this.onClearClick}>Show All Routes</button>
           </p>
             <Table className="routes-table" columns={columns} rows={filteredRoutes} format={this.formatValue} perPage={25} />
         </section>
