@@ -9,6 +9,7 @@ import Select from './components/select.js'
 class App extends Component {
   state = {
     selectedAirline: 'all',
+    selectedAirport: 'all'
   }
 
   formatValue(property, value) {
@@ -25,8 +26,18 @@ class App extends Component {
     })
   )
 
+  onAirportSelect = (e) => (
+    this.setState({
+      selectedAirport: e.target.value,
+    })
+  )
+
   routeMatchesSelectedAirline(route){
     return route.airline.toString() === this.state.selectedAirline || this.state.selectedAirline === 'all';
+  }
+
+  routeMatchesSelectedAirport(route){
+    return route.src === this.state.selectedAirport || route.dest === this.state.selectedAirport || this.state.selectedAirport === 'all';
   }
 
 
@@ -36,10 +47,12 @@ class App extends Component {
       {name: 'Source Airport', property: 'src'},
       {name: 'Destination Airport', property: 'dest'},
     ];
-
+    console.log(this.state.selectedAirport)
     const filteredAirlines = DATA.airlines;
 
-    const filteredRoutes = DATA.routes.filter(route => this.routeMatchesSelectedAirline(route));
+    const filteredAirports = DATA.airports;
+
+    const filteredRoutes = DATA.routes.filter(route => this.routeMatchesSelectedAirline(route) && this.routeMatchesSelectedAirport(route));
 
     return (
       <div className="app">
@@ -47,8 +60,14 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
+          <p>
+            Show Routes on
           <Select options={filteredAirlines} valueKey="id" titleKey="name"
               allTitle="All Airlines" value="" onSelect={this.onAirlineSelect} />
+            flying in or out of
+          <Select options={filteredAirports} valueKey="code" titleKey="name"
+              allTitle="All Airports" value="" onSelect={this.onAirportSelect} />
+          </p>
             <Table className="routes-table" columns={columns} rows={filteredRoutes} format={this.formatValue} perPage={25} />
         </section>
       </div>
