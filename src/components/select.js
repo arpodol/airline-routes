@@ -4,7 +4,6 @@ class Select extends Component {
 
   render() {
     return (
-      <p>
       <select onChange={this.props.onSelect}>
         <option value='all'>{this.props.allTitle}</option>
         {this.props.options.map(airline => (
@@ -12,7 +11,6 @@ class Select extends Component {
         ))
         }
       </select>
-      </p>
     )
   }
 }
